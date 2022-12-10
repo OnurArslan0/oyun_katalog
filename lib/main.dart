@@ -3,8 +3,17 @@ import 'package:flutter/services.dart';
 
 import 'Gamebox.dart';
 
+List<Gamebox> favori = [];
 void main() {
   runApp(const MyApp());
+}
+
+void kaka(List<Gamebox> oyunlistemiz, List<Gamebox> favori) {
+  for (int i = 0; i < oyunlistemiz.length; i++) {
+    if (oyunlistemiz[i].oyun_favori_mi == true) {
+      favori.add(oyunlistemiz[i]);
+    }
+  }
 }
 
 Gamebox oyun1 = Gamebox(
@@ -13,7 +22,7 @@ Gamebox oyun1 = Gamebox(
   oyun_asseti:
       "https://cdn.ntvspor.net/6733d93215d441b68945b2d381d4ba04.jpeg?mode=crop&w=940&h=626",
   oyun_puani: 96,
-  oyun_favori_mi: false,
+  oyun_favori_mi: true,
   reddit_asseti: "https://www.reddit.com/r/GrandTheftAutoV/",
   website_asseti: "https://www.rockstargames.com/gta-v",
   oyun_tanitimi:
@@ -51,7 +60,7 @@ Gamebox oyun4 = Gamebox(
   oyun_kategorisi: "Action, puzzle",
   oyun_asseti: "https://www.rabisu.com/images/lf4d2-banner.png",
   oyun_puani: 89,
-  oyun_favori_mi: false,
+  oyun_favori_mi: true,
   reddit_asseti: "https://www.reddit.com/r/l4d2/",
   website_asseti: "https://www.l4d.com/game.html",
   oyun_tanitimi:
@@ -77,7 +86,7 @@ Gamebox oyun6 = Gamebox(
   oyun_asseti:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH_WYthI3zYwCzOMLJGF7JrlZEd_7Q2z9n2w&usqp=CAU",
   oyun_puani: 94,
-  oyun_favori_mi: false,
+  oyun_favori_mi: true,
   reddit_asseti: "https://www.reddit.com/r/skyrim/",
   website_asseti: "https://elderscrolls.bethesda.net/en/skyrim",
   oyun_tanitimi:
@@ -90,7 +99,7 @@ Gamebox oyun7 = Gamebox(
   oyun_asseti:
       "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/3367fa99-0ba6-454c-b947-683f1a9f896d/ddvjouf-f7f4076c-b30a-43b6-b34f-a2b796cdab2f.png",
   oyun_puani: 75,
-  oyun_favori_mi: false,
+  oyun_favori_mi: true,
   reddit_asseti: "https://www.reddit.com/r/dyinglight/",
   website_asseti: "https://dyinglightgame.com/",
   oyun_tanitimi:
@@ -119,7 +128,24 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const GameDescp(),
+      home: Sayfa1(),
+    );
+  }
+}
+
+class Sayfa1 extends StatelessWidget {
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Sayfa 1")),
+      body: Center(
+        child: MaterialButton(
+          child: Text("Sayfa 2'ye Git!", style: TextStyle(fontSize: 20)),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => GameDescp()),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -136,21 +162,49 @@ class _GameDescpState extends State<GameDescp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
+        leading: Builder(builder: (BuildContext context) {
+          return SizedBox(
+            child: MaterialButton(
+              onPressed: () {
+                setState(() {
+                  kaka(oyun_listesi, favori);
+                  print(favori[0].oyun_ismi);
+                  print(favori[1].oyun_ismi);
+                  print(favori[2].oyun_ismi);
+                  print(favori[3].oyun_ismi);
+                });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Sayfa1(),
+                    ));
+              },
+              child: Row(
+                children: const [
+                  Icon(
+                    Icons.arrow_back_ios_sharp,
+                    color: Color.fromRGBO(0, 122, 255, 1),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+        actions: [
           MaterialButton(
             onPressed: () {},
-            child: Container(
-              width: double.infinity,
-              child: Text("Visit reddit"),
+            child: Row(
+              children: const [
+                Text(
+                  "Favourite",
+                  style: TextStyle(
+                    color: Color.fromRGBO(0, 122, 255, 1),
+                    fontSize: 18,
+                  ),
+                ),
+              ],
             ),
-          ),
-          MaterialButton(
-            onPressed: () {},
-            child: Container(
-              width: double.infinity,
-              child: Text("Visit reddit"),
-            ),
-          ),
+          )
         ],
         backgroundColor: Colors.white,
       ),
@@ -166,7 +220,7 @@ class _GameDescpState extends State<GameDescp> {
                     oyun_listesi[3].oyun_asseti,
                     height: 291,
                     width: double.infinity,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                   ),
                 ),
                 Positioned(
