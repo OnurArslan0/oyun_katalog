@@ -170,21 +170,36 @@ class _FavPageState extends State<FavPage> {
             pinned: _pinned,
             snap: _snap,
             floating: _floating,
-            flexibleSpace: const FlexibleSpaceBar(
+            flexibleSpace: FlexibleSpaceBar(
               titlePadding: EdgeInsets.fromLTRB(16, 0, 0, 9),
               expandedTitleScale: 1,
               title: PreferredSize(
                 preferredSize: Size(double.infinity, 41),
-                child: Text(
-                  "Favorites",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 34,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    letterSpacing: 0.41,
-                  ),
-                ),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  if (favori.length > 0) {
+                    return Text(
+                      "Favourites (${favori.length})",
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        letterSpacing: 0.41,
+                      ),
+                    );
+                  } else {
+                    return Text(
+                      "Favourites",
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        letterSpacing: 0.41,
+                      ),
+                    );
+                  }
+                }),
               ),
             ),
             expandedHeight: 140,
