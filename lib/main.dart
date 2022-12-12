@@ -159,6 +159,7 @@ class _GameDescp1State extends State<GameDescp1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(229, 229, 229, 1),
       appBar: AppBar(
         leading: Builder(builder: (BuildContext context) {
           return SizedBox(
@@ -186,6 +187,8 @@ class _GameDescp1State extends State<GameDescp1> {
         }),
         actions: [
           MaterialButton(
+            padding: const EdgeInsets.all(0),
+            color: const Color.fromRGBO(255, 255, 255, 1),
             onPressed: () {
               if (oyun_listesi[global_index].oyun_favori_mi == true) {
                 oyun_listesi[global_index].oyun_favori_mi = false;
@@ -215,13 +218,29 @@ class _GameDescp1State extends State<GameDescp1> {
           children: [
             Stack(
               children: <Widget>[
+                Image.network(
+                  oyun_listesi[global_index].oyun_asseti,
+                  height: 291,
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                ),
                 Container(
-                  child: Image.network(
-                    oyun_listesi[global_index].oyun_asseti,
-                    height: 291,
-                    width: double.infinity,
-                    fit: BoxFit.fill,
-                  ),
+                  height: 291.0,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      gradient: LinearGradient(
+                          begin: FractionalOffset.topCenter,
+                          end: FractionalOffset.bottomCenter,
+                          colors: [
+                            Colors.black87.withOpacity(0.0),
+                            Colors.black87.withOpacity(0.9),
+                            Colors.black87,
+                          ],
+                          stops: const [
+                            0.0,
+                            0.8,
+                            1.0
+                          ])),
                 ),
                 Positioned(
                   bottom: 0,
@@ -229,12 +248,17 @@ class _GameDescp1State extends State<GameDescp1> {
                   child: Container(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: Text(
-                        oyun_listesi[global_index].oyun_ismi,
-                        style: const TextStyle(
-                          fontSize: 36,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                      child: Container(
+                        width: 330,
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          textAlign: TextAlign.end,
+                          oyun_listesi[global_index].oyun_ismi,
+                          style: const TextStyle(
+                            fontSize: 36,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -267,22 +291,22 @@ class _GameDescp1State extends State<GameDescp1> {
                     color: Colors.grey,
                   ),
                   MaterialButton(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                     onPressed: () {},
                     child: Container(
                       width: double.infinity,
-                      child: Text("Visit reddit"),
+                      child: const Text("Visit reddit"),
                     ),
                   ),
                   const Divider(
                     color: Colors.grey,
                   ),
                   MaterialButton(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                     onPressed: () {},
                     child: Container(
                       width: double.infinity,
-                      child: Text("Visit website"),
+                      child: const Text("Visit website"),
                     ),
                   ),
                   const Divider(
@@ -300,6 +324,18 @@ class _GamesPageState extends State<GamesPage> {
   final bool _pinned = true;
   final bool _snap = false;
   final bool _floating = false;
+  List<Gamebox> oyun_aratilan = List.from(oyun_listesi);
+  void search(String value) {
+    setState(() {
+      oyun_aratilan = oyun_listesi
+          .where((element) =>
+              element.oyun_ismi.toLowerCase().contains(value.toLowerCase()) ||
+              element.oyun_kategorisi!
+                  .toLowerCase()
+                  .contains(value.toLowerCase()))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -362,8 +398,9 @@ class _GamesPageState extends State<GamesPage> {
                         Expanded(
                           child: Container(
                             height: 22,
-                            child: const Center(
+                            child: Center(
                               child: TextField(
+                                onChanged: (value) => search(value),
                                 autocorrect: false,
                                 decoration: InputDecoration.collapsed(
                                     hintText: "Search for the games",
@@ -385,7 +422,7 @@ class _GamesPageState extends State<GamesPage> {
           SliverList(
             //Gamebox tipinde oluşturulan verilerin ekrana liste üzerinden oluşturulması ve ekrana gösterilmesi
             delegate: SliverChildBuilderDelegate((context, index) {
-              final oyun = oyun_listesi[index];
+              final oyun = oyun_aratilan[index];
               return MaterialButton(
                 color: Colors.white,
                 onPressed: () {
@@ -399,9 +436,9 @@ class _GamesPageState extends State<GamesPage> {
                 },
                 child: Container(
                   height: 136,
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   width: double.infinity,
-                  color: Color.fromRGBO(255, 255, 255, 1),
+                  color: const Color.fromRGBO(255, 255, 255, 1),
                   child: Row(children: [
                     Image.network(
                       oyun.oyun_asseti,
@@ -409,7 +446,7 @@ class _GamesPageState extends State<GamesPage> {
                       width: 104,
                       fit: BoxFit.fill,
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,7 +454,7 @@ class _GamesPageState extends State<GamesPage> {
                           Expanded(
                             child: Text(
                               oyun.oyun_ismi,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -428,7 +465,7 @@ class _GamesPageState extends State<GamesPage> {
                                 fontWeight: FontWeight.w500,
                               ),
                               children: [
-                                TextSpan(text: "metacritic: "),
+                                const TextSpan(text: "metacritic: "),
                                 TextSpan(
                                   text: "${oyun.oyun_puani}",
                                   style: const TextStyle(
@@ -450,7 +487,7 @@ class _GamesPageState extends State<GamesPage> {
                   ]),
                 ),
               );
-            }, childCount: oyun_listesi.length),
+            }, childCount: oyun_aratilan.length),
           ),
         ],
       ),
