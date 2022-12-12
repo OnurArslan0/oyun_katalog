@@ -1,3 +1,4 @@
+//Gamebox classımızı oluşturduk ve daha sonra kullanacağımız değişkenleri tanımladık.
 class Gamebox {
   String oyun_ismi;
   String oyun_kategorisi;
@@ -9,6 +10,7 @@ class Gamebox {
   String oyun_tanitimi;
   int oyun_index;
 
+  //Gamebox constructor
   Gamebox(
       {required this.oyun_ismi,
       required this.oyun_kategorisi,

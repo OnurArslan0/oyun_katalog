@@ -17,25 +17,43 @@ class FavDescp extends StatefulWidget {
   State<FavDescp> createState() => _FavDescpState();
 }
 
+//favori listesi için kullandığımız index değişkeni
 int fav_index = 0;
 
+//Favori kısmındaki oyunların descpleri için oluşturduğumuz class.
+//Gamedescp classından farkı favori listemize ve favori indexine göre çalışması.
 class _FavDescpState extends State<FavDescp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        //Games yazısı overflow olduğu için genişliğini arttırarak düzelttik.
+        leadingWidth: 200,
         leading: Builder(builder: (BuildContext context) {
           return SizedBox(
+            //SizedBox'un içine buton tanımlıyoruz
+            //< Games butonuna basınca games sayfamıza dönmeyi sağlıyo.
             child: MaterialButton(
               onPressed: () {
+                //Mainde yazdığımız oyun listesini alan ve favori listemizi güncelleyen fonksiyon
                 favori_list_guncelle(oyun_listesi, favori);
+                //Butona bastığımızda ana sayfaya dönmemizi sağlıyo
                 Navigator.popUntil(context, ((route) => route.isFirst));
               },
+              //Bizden istenen şekilde textimiz ve iconumuzun renklerini ayarlıyoruz.
               child: Row(
                 children: const [
                   Icon(
                     Icons.arrow_back_ios_sharp,
                     color: Color.fromRGBO(0, 122, 255, 1),
+                  ),
+                  Text(
+                    "Games",
+                    style: TextStyle(
+                      color: Color.fromRGBO(0, 122, 255, 1),
+                      fontSize: 18,
+                    ),
                   ),
                 ],
               ),
@@ -43,51 +61,86 @@ class _FavDescpState extends State<FavDescp> {
           );
         }),
         actions: [
+          //Favori butonumuz
           MaterialButton(
+            //Butona her tıkladığımızda favorideyse favoriden çıkartıcak,eğer favori değilse favoriye ekleyecek.
             onPressed: () {
+              //If'in içinde oyunun favori olup olmadığını kontrol edip butona bastığımızda değerini güncelliyor.
               if (favori[fav_index].oyun_favori_mi == true) {
                 favori[fav_index].oyun_favori_mi = false;
+                setState(() {});
               } else {
                 favori[fav_index].oyun_favori_mi = true;
+                setState(() {});
               }
             },
+            //Bizden istenen şekilde textimizin renklerini ve boyutunu ayarlıyoruz.
             child: Row(
-              children: const [
-                Text(
-                  "Favourite",
-                  style: TextStyle(
-                    color: Color.fromRGBO(0, 122, 255, 1),
-                    fontSize: 18,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  //Favourite  unfavourite olma durumunu burada güncelliyoruz.
+                  child: Text(
+                    favori[fav_index].oyun_favori_mi == true
+                        ? "Unfavourite"
+                        : "Favourite",
+                    style: const TextStyle(
+                      color: Color.fromRGBO(0, 122, 255, 1),
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ],
             ),
           )
         ],
-        backgroundColor: Colors.white,
       ),
+      //Appbarın altındaki tüm sayfayı kaplayan container
       body: Container(
         color: Color.fromRGBO(255, 255, 255, 0.92),
         child: Column(
+          //Column'un içindeki her şeyi sola yaslıyor.
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //Containeri stackle sarıyoruz çünkü üzerine oyunun ismini yazdırıyoruz
             Stack(
               children: <Widget>[
-                Container(
-                  child: Image.network(
-                    favori[fav_index].oyun_asseti,
-                    height: 291,
-                    width: double.infinity,
-                    fit: BoxFit.fill,
-                  ),
+                Image.network(
+                  favori[fav_index].oyun_asseti,
+                  height: 291,
+                  width: double.infinity,
+                  fit: BoxFit.fill,
                 ),
+                //Gradient yapısıyla yazının arkasına gölge eklediğimiz container
+                Container(
+                  height: 291.0,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      gradient: LinearGradient(
+                          begin: FractionalOffset.topCenter,
+                          end: FractionalOffset.bottomCenter,
+                          colors: [
+                            Colors.black87.withOpacity(0.0),
+                            Colors.black87.withOpacity(0.9),
+                            Colors.black87,
+                          ],
+                          stops: const [
+                            0.0,
+                            0.8,
+                            1.0
+                          ])),
+                ),
+                //Containeri sağ alt köşeye sabitledik
                 Positioned(
                   bottom: 0,
                   right: 0,
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: Container(
+                      width: 330,
                       child: Text(
+                        textAlign: TextAlign.end,
+                        //Favori listemizden anlık fav_index'e göre oyunumuzun ismini çekiyor.
                         favori[fav_index].oyun_ismi,
                         style: const TextStyle(
                           fontSize: 36,
@@ -100,9 +153,11 @@ class _FavDescpState extends State<FavDescp> {
                 ),
               ],
             ),
+            //GameDescp ve visit reddit , visit website
             Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  //GamedDescp container
                   Container(
                     child: const Padding(
                       padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -115,12 +170,14 @@ class _FavDescpState extends State<FavDescp> {
                       ),
                     ),
                   ),
+                  //Favori listemizden anlık fav_index'e göre oyunumuzun oyun tanıtımını yazdırıyoruz.
                   Container(
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
                       child: Text(favori[fav_index].oyun_tanitimi),
                     ),
                   ),
+                  //aradaki ince çizgi
                   const Divider(
                     color: Colors.grey,
                   ),
@@ -154,6 +211,7 @@ class _FavDescpState extends State<FavDescp> {
   }
 }
 
+//GamePageState classından farkı favori listemize ve favori indexine göre çalışması.
 class _FavPageState extends State<FavPage> {
   final bool _pinned = true;
   final bool _snap = false;
@@ -188,10 +246,10 @@ class _FavPageState extends State<FavPage> {
                       ),
                     );
                   } else {
-                    return Text(
+                    return const Text(
                       "Favourites",
                       textAlign: TextAlign.left,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -209,6 +267,8 @@ class _FavPageState extends State<FavPage> {
             delegate: SliverChildBuilderDelegate((context, index) {
               final oyun = favori[index];
               return MaterialButton(
+                color: const Color.fromRGBO(255, 255, 255, 1),
+                padding: const EdgeInsets.all(0),
                 onPressed: () {
                   fav_index = index;
                   Navigator.push(
@@ -220,9 +280,9 @@ class _FavPageState extends State<FavPage> {
                 },
                 child: Container(
                   height: 136,
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   width: double.infinity,
-                  color: Color.fromRGBO(255, 255, 255, 1),
+                  color: const Color.fromRGBO(255, 255, 255, 1),
                   child: Row(children: [
                     Image.network(
                       oyun.oyun_asseti,
@@ -230,7 +290,7 @@ class _FavPageState extends State<FavPage> {
                       width: 104,
                       fit: BoxFit.fill,
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,21 +298,21 @@ class _FavPageState extends State<FavPage> {
                           Expanded(
                             child: Text(
                               oyun.oyun_ismi,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
                           Text.rich(
                             TextSpan(
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
                               ),
                               children: [
-                                TextSpan(text: "metacritic: "),
+                                const TextSpan(text: "metacritic: "),
                                 TextSpan(
                                   text: "${oyun.oyun_puani}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Color.fromRGBO(216, 0, 0, 1),
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),
@@ -262,7 +322,7 @@ class _FavPageState extends State<FavPage> {
                           ),
                           Text(
                             oyun.oyun_kategorisi,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color.fromRGBO(138, 138, 143, 1)),
                           ),
                         ],
@@ -273,6 +333,29 @@ class _FavPageState extends State<FavPage> {
               );
             }, childCount: favori.length),
           ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Container(
+                height: 114,
+                color: Colors.transparent,
+                child: favori.isEmpty
+                    ? const Expanded(
+                        child: SizedBox(
+                          height: 114,
+                          width: double.infinity,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 36),
+                            child: Text("There is no favourites found.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                )),
+                          ),
+                        ),
+                      )
+                    : SizedBox()),
+          )
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -298,9 +381,10 @@ class _FavPageState extends State<FavPage> {
                     ),
                     child: Column(
                       children: [
-                        Icon(
-                          Icons.accessibility_new_rounded,
-                          size: 30,
+                        Image.asset(
+                          'asset/Vector.png',
+                          width: 42,
+                          height: 28,
                           color: ColorSelect.greyColor,
                         ),
                         SizedBox(
