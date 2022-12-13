@@ -335,22 +335,16 @@ class _FavPageState extends State<FavPage> {
           ),
           SliverFillRemaining(
             hasScrollBody: false,
-            child: Container(
-                height: 114,
-                color: Colors.transparent,
+            child: SizedBox(
                 child: favori.isEmpty
-                    ? const Expanded(
-                        child: SizedBox(
-                          height: 114,
-                          width: double.infinity,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 36),
-                            child: Text("There is no favourites found.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                )),
+                    ? const Padding(
+                        padding: EdgeInsets.only(top: 36),
+                        child: Text(
+                          "There is no favourites found.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
                           ),
                         ),
                       )
@@ -420,7 +414,7 @@ class _FavPageState extends State<FavPage> {
                         SizedBox(
                           height: 12,
                           child: Text(
-                            "Favorites",
+                            "Favourites",
                             style: TextStyle(
                               color: ColorSelect.blueColor,
                               fontSize: 10,

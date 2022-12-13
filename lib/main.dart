@@ -516,22 +516,16 @@ class _GamesPageState extends State<GamesPage> {
           //Aratılan öge bulunamazsa veya favori kısmında oyun bulunmuyorsa bu durumları burada inceliyoruz.
           SliverFillRemaining(
             hasScrollBody: false,
-            child: Container(
-                height: 114,
-                color: Colors.transparent,
+            child: SizedBox(
                 child: oyun_aratilan.isEmpty
-                    ? const Expanded(
-                        child: SizedBox(
-                          height: 114,
-                          width: double.infinity,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 36),
-                            child: Text("No game has been searched.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                )),
+                    ? const Padding(
+                        padding: EdgeInsets.only(top: 36),
+                        child: Text(
+                          "No game has been searched.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
                           ),
                         ),
                       )
