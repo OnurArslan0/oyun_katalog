@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'data.dart';
 import 'main.dart';
@@ -23,6 +24,20 @@ int fav_index = 0;
 //Favori kısmındaki oyunların descpleri için oluşturduğumuz class.
 //Gamedescp classından farkı favori listemize ve favori indexine göre çalışması.
 class _FavDescpState extends State<FavDescp> {
+  launchReddit(String url) async {
+    await launchUrl(Uri.parse(url));
+    return;
+  }
+
+  launchWebsite(String url) async {
+    if (url.startsWith("https")) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      await launchUrl(Uri.parse(url.replaceAll("http", "https")));
+    }
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,7 +199,12 @@ class _FavDescpState extends State<FavDescp> {
                     ),
                     MaterialButton(
                       padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                      onPressed: () {},
+                      onPressed: () {
+                        reddit = favori[fav_index].reddit_asseti;
+                        if (reddit != null) {
+                          launchReddit(reddit!);
+                        }
+                      },
                       child: Container(
                         width: double.infinity,
                         child: Text("Visit reddit"),
@@ -195,7 +215,12 @@ class _FavDescpState extends State<FavDescp> {
                     ),
                     MaterialButton(
                       padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                      onPressed: () {},
+                      onPressed: () {
+                        website = favori[fav_index].website_asseti;
+                        if (website != null) {
+                          launchWebsite(website!);
+                        }
+                      },
                       child: Container(
                         width: double.infinity,
                         child: Text("Visit website"),

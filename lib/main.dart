@@ -107,7 +107,11 @@ class _GameDescp1State extends State<GameDescp1> {
   }
 
   launchWebsite(String url) async {
-    await launchUrl(Uri.parse(url));
+    if (url.startsWith("https")) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      await launchUrl(Uri.parse(url.replaceAll("http", "https")));
+    }
     return;
   }
 
@@ -276,7 +280,6 @@ class _GameDescp1State extends State<GameDescp1> {
                     MaterialButton(
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                       onPressed: () {
-                        print(oyun_aratilan[global_index].reddit_asseti);
                         reddit = oyun_aratilan[global_index].reddit_asseti;
                         if (reddit != null) {
                           launchReddit(reddit!);
@@ -292,7 +295,12 @@ class _GameDescp1State extends State<GameDescp1> {
                     ),
                     MaterialButton(
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                      onPressed: () {},
+                      onPressed: () {
+                        website = oyun_aratilan[global_index].website_asseti;
+                        if (website != null) {
+                          launchWebsite(website!);
+                        }
+                      },
                       child: Container(
                         width: double.infinity,
                         child: const Text("Visit website"),
