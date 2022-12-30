@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'Gamebox.dart';
 import 'data.dart';
@@ -6,6 +10,26 @@ import 'fav.dart';
 
 void main() {
   runApp(const AppBackGr());
+}
+
+Future<String> fetchData() async {
+  final response = await http.get(Uri.parse(
+      'https://api.rawg.io/api/games?page_size=34&page=1&key=3be8af6ebf124ffe81d90f514e59856c'));
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception('Unexpected error occured!');
+  }
+}
+
+Future<String> fetchgameData(int id) async {
+  final response = await http.get(Uri.parse(
+      'https://api.rawg.io/api/games/$id?key=3be8af6ebf124ffe81d90f514e59856c'));
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception('Unexpected error occured!');
+  }
 }
 
 //oyun listesi için kullandığımız index değişkeni
@@ -39,99 +63,11 @@ void favori_list_guncelle(List<Gamebox> oyunlistemiz, List<Gamebox> favori) {
   }
 }
 
+String? website = " ";
+String? reddit = " ";
 //Uygulamamızda kullanacağımız tüm oyunların tek tek bilgilerini burada veriyoruz.
-Gamebox oyun1 = Gamebox(
-  oyun_ismi: "Grand Theft Auto V",
-  oyun_kategorisi: "Action, shooter",
-  oyun_asseti:
-      "https://cdn.ntvspor.net/6733d93215d441b68945b2d381d4ba04.jpeg?mode=crop&w=940&h=626",
-  oyun_puani: 96,
-  oyun_favori_mi: false,
-  reddit_asseti: "https://www.reddit.com/r/GrandTheftAutoV/",
-  website_asseti: "https://www.rockstargames.com/gta-v",
-  oyun_tanitimi:
-      "Grand Theft Auto V is an action-adventure game played from either a third-person or first-person perspective. Players complete missions—linear scenarios with set objectives—to progress through the story. Outside of the missions, players may freely roam the open world.",
-);
-Gamebox oyun2 = Gamebox(
-  oyun_ismi: "Portal 2",
-  oyun_kategorisi: "Action, puzzle",
-  oyun_asseti:
-      "https://assets-prd.ignimgs.com/2021/12/08/portal2-1638924084230.jpg",
-  oyun_puani: 95,
-  oyun_favori_mi: false,
-  reddit_asseti: "https://www.reddit.com/r/Portal/",
-  website_asseti: "https://www.thinkwithportals.com/about.php",
-  oyun_tanitimi:
-      "Portal 2 is a first-person perspective puzzle game. The player takes the role of Chell in the single-player campaign, as one of two robots—Atlas and P-Body—in the cooperative campaign, or as a simplistic humanoid icon in community-developed puzzles.",
-);
-Gamebox oyun3 = Gamebox(
-  oyun_ismi: "The Witcher 3: Wild Hunt",
-  oyun_kategorisi: "Action, puzzle",
-  oyun_asseti:
-      "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c78bc3fc-9f08-47ca-81ae-d89055c7ec49/d8p7j8m-978d944f-b106-413d-9e7b-18fc7875b47c.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2M3OGJjM2ZjLTlmMDgtNDdjYS04MWFlLWQ4OTA1NWM3ZWM0OVwvZDhwN2o4bS05NzhkOTQ0Zi1iMTA2LTQxM2QtOWU3Yi0xOGZjNzg3NWI0N2MucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.YKJZ24xa3NeCKchv4M8bc3mMBqCjJtto3TRQl57XeJY",
-  oyun_puani: 95,
-  oyun_favori_mi: false,
-  reddit_asseti: "https://www.reddit.com/r/Witcher3/",
-  website_asseti: "https://www.thewitcher.com/en/witcher3#undefined",
-  oyun_tanitimi:
-      "The Witcher 3: Wild Hunt is an action role-playing game with a third-person perspective. Players control Geralt of Rivia, a monster slayer known as a Witcher. Geralt walks, runs, rolls and dodges, and (for the first time in the series) jumps, climbs and swims.",
-);
-Gamebox oyun4 = Gamebox(
-  oyun_ismi: "Left 4 Dead 2",
-  oyun_kategorisi: "Action, puzzle",
-  oyun_asseti: "https://www.rabisu.com/images/lf4d2-banner.png",
-  oyun_puani: 89,
-  oyun_favori_mi: true,
-  reddit_asseti: "https://www.reddit.com/r/l4d2/",
-  website_asseti: "https://www.l4d.com/game.html",
-  oyun_tanitimi:
-      "Description. From Valve® — creators of Counter-Strike®, Half-Life®, Portal™ and Team Fortress® — Left 4 Dead™ 2 is a game that casts up to four 'Survivors' in an epic struggle against hordes of swarming zombies and terrifying 'Boss Infected' mutants.",
-);
-Gamebox oyun5 = Gamebox(
-  oyun_ismi: "Metin 2",
-  oyun_kategorisi: "MMORPG, fantasy",
-  oyun_asseti:
-      "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b1f444f5-ca6c-4df3-8c44-ec6e0276f5ac/d75ftwe-64e5cbcb-25c0-4ce7-8d25-27e6dfe9d475.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2IxZjQ0NGY1LWNhNmMtNGRmMy04YzQ0LWVjNmUwMjc2ZjVhY1wvZDc1ZnR3ZS02NGU1Y2JjYi0yNWMwLTRjZTctOGQyNS0yN2U2ZGZlOWQ0NzUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.T_DRzhYfLsN_f2AJxHnU73dcbQ4qS7Eab_pR3gZAqis",
-  oyun_puani: 74,
-  oyun_favori_mi: false,
-  reddit_asseti: "https://www.reddit.com/r/Metin2/",
-  website_asseti: "https://gameforge.com/tr-TR/play/metin2",
-  oyun_tanitimi:
-      "Metin2 is a 3D fantasy MMORPG where players choose from one of five classes and join one of three kingdoms to fight for dominance on a sprawling continent. Fight legions of mobs, complete quests, and duel other players with an active combat system. Pros: +Hack and slash combat.",
-);
-Gamebox oyun6 = Gamebox(
-  oyun_ismi: "The Elder Scrolls V: Skyrim",
-  oyun_kategorisi: "Role-Playing, action",
-  oyun_asseti:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH_WYthI3zYwCzOMLJGF7JrlZEd_7Q2z9n2w&usqp=CAU",
-  oyun_puani: 94,
-  oyun_favori_mi: false,
-  reddit_asseti: "https://www.reddit.com/r/skyrim/",
-  website_asseti: "https://elderscrolls.bethesda.net/en/skyrim",
-  oyun_tanitimi:
-      "The Elder Scrolls V: Skyrim is an action role-playing game, playable from either a first- or third-person perspective. The player may freely roam over the land of Skyrim, an open world environment consisting of wilderness expanses, dungeons, caves, cities, towns, fortresses, and villages.",
-);
-Gamebox oyun7 = Gamebox(
-  oyun_ismi: "Dying Light 2",
-  oyun_kategorisi: "Horror, survival",
-  oyun_asseti:
-      "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/3367fa99-0ba6-454c-b947-683f1a9f896d/ddvjouf-f7f4076c-b30a-43b6-b34f-a2b796cdab2f.png",
-  oyun_puani: 75,
-  oyun_favori_mi: true,
-  reddit_asseti: "https://www.reddit.com/r/dyinglight/",
-  website_asseti: "https://dyinglightgame.com/",
-  oyun_tanitimi:
-      "Dying Light 2: Stay Human is a first-person open-world action game set in an isolated urban landscape after a zombie apocalypse. The Dying Light series puts a big emphasis on traversal, providing you with parkour abilities so you can make your way through its desolate urban landscape quickly and effectively.",
-);
-List<Gamebox> oyun_listesi = <Gamebox>[
-  oyun1,
-  oyun2,
-  oyun3,
-  oyun4,
-  oyun5,
-  oyun6,
-  oyun7
-]; //Gamebox tipinde tanımladığımız oyunların listesi
+
+List<Gamebox> oyun_listesi = [];
 
 class AppBackGr extends StatelessWidget {
   const AppBackGr({Key? key}) : super(key: key);
@@ -165,6 +101,33 @@ class GameDescp1 extends StatefulWidget {
 
 //FavDescpState kısmındakilerini aynen oyun_listesi ve GlobalIndexe göre gerçekleştiriyor.
 class _GameDescp1State extends State<GameDescp1> {
+  launchReddit(String url) async {
+    await launchUrl(Uri.parse(url));
+    return;
+  }
+
+  launchWebsite(String url) async {
+    await launchUrl(Uri.parse(url));
+    return;
+  }
+
+  void fetchgameDescp() async {
+    String oyunlarString =
+        (await fetchgameData(oyun_aratilan[global_index].oyun_id)) as String;
+    Map<String, dynamic> json = jsonDecode(oyunlarString);
+
+    var gameBox = Gamebox.fromJson(Map.from(json));
+    oyun_aratilan[global_index] = gameBox;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    fetchgameDescp();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -175,7 +138,7 @@ class _GameDescp1State extends State<GameDescp1> {
           return SizedBox(
             child: MaterialButton(
               onPressed: () {
-                favori_list_guncelle(oyun_listesi, favori);
+                favori_list_guncelle(oyun_aratilan, favori);
                 Navigator.popUntil(context, ((route) => route.isFirst));
               },
               child: Row(
@@ -201,11 +164,11 @@ class _GameDescp1State extends State<GameDescp1> {
             padding: const EdgeInsets.all(0),
             color: const Color.fromRGBO(255, 255, 255, 1),
             onPressed: () {
-              if (oyun_listesi[global_index].oyun_favori_mi == true) {
-                oyun_listesi[global_index].oyun_favori_mi = false;
+              if (oyun_aratilan[global_index].oyun_favori_mi == true) {
+                oyun_aratilan[global_index].oyun_favori_mi = false;
                 setState(() {});
               } else {
-                oyun_listesi[global_index].oyun_favori_mi = true;
+                oyun_aratilan[global_index].oyun_favori_mi = true;
                 setState(() {});
               }
             },
@@ -215,7 +178,7 @@ class _GameDescp1State extends State<GameDescp1> {
                   padding: const EdgeInsets.only(right: 16),
                   child: Text(
                     textAlign: TextAlign.end,
-                    oyun_listesi[global_index].oyun_favori_mi == true
+                    oyun_aratilan[global_index].oyun_favori_mi == true
                         ? "Unfavourite"
                         : "Favourite",
                     style: const TextStyle(
@@ -230,113 +193,124 @@ class _GameDescp1State extends State<GameDescp1> {
         ],
         backgroundColor: Colors.white,
       ),
-      body: Container(
-        color: Color.fromRGBO(255, 255, 255, 0.92),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: <Widget>[
-                Image.network(
-                  oyun_listesi[global_index].oyun_asseti,
-                  height: 291,
-                  width: double.infinity,
-                  fit: BoxFit.fill,
-                ),
-                Container(
-                  height: 291.0,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      gradient: LinearGradient(
-                          begin: FractionalOffset.topCenter,
-                          end: FractionalOffset.bottomCenter,
-                          colors: [
-                            Colors.black87.withOpacity(0.0),
-                            Colors.black87.withOpacity(0.9),
-                            Colors.black87,
-                          ],
-                          stops: const [
-                            0.0,
-                            0.8,
-                            1.0
-                          ])),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: Container(
-                        width: 330,
-                        child: Text(
-                          textAlign: TextAlign.end,
-                          oyun_listesi[global_index].oyun_ismi,
-                          style: const TextStyle(
-                            fontSize: 36,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Container(
+          color: Color.fromRGBO(255, 255, 255, 0.92),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: <Widget>[
+                  Image.network(
+                    oyun_aratilan[global_index].oyun_asseti,
+                    height: 291,
+                    width: double.infinity,
+                    fit: BoxFit.fill,
+                  ),
+                  Container(
+                    height: 291.0,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        gradient: LinearGradient(
+                            begin: FractionalOffset.topCenter,
+                            end: FractionalOffset.bottomCenter,
+                            colors: [
+                              Colors.black87.withOpacity(0.0),
+                              Colors.black87.withOpacity(0.9),
+                              Colors.black87,
+                            ],
+                            stops: const [
+                              0.0,
+                              0.8,
+                              1.0
+                            ])),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        child: Container(
+                          width: 330,
+                          child: Text(
+                            textAlign: TextAlign.end,
+                            oyun_aratilan[global_index].oyun_ismi,
+                            style: const TextStyle(
+                              fontSize: 36,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    child: const Padding(
-                      padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-                      child: Text(
-                        "Game Description",
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
+                ],
+              ),
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      child: const Padding(
+                        padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+                        child: Text(
+                          "Game Description",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: Text(oyun_listesi[global_index].oyun_tanitimi),
+                    Container(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        child: Text(
+                            oyun_aratilan[global_index].oyun_tanitimi ?? ""),
+                      ),
                     ),
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                  ),
-                  MaterialButton(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                    onPressed: () {},
-                    child: Container(
-                      width: double.infinity,
-                      child: const Text("Visit reddit"),
+                    const Divider(
+                      color: Colors.grey,
                     ),
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                  ),
-                  MaterialButton(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                    onPressed: () {},
-                    child: Container(
-                      width: double.infinity,
-                      child: const Text("Visit website"),
+                    MaterialButton(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                      onPressed: () {
+                        print(oyun_aratilan[global_index].reddit_asseti);
+                        reddit = oyun_aratilan[global_index].reddit_asseti;
+                        if (reddit != null) {
+                          launchReddit(reddit!);
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        child: const Text("Visit reddit"),
+                      ),
                     ),
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                  ),
-                ]),
-          ],
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    MaterialButton(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                      onPressed: () {},
+                      child: Container(
+                        width: double.infinity,
+                        child: const Text("Visit website"),
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                  ]),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+List<Gamebox> oyun_aratilan = List.from(oyun_listesi);
 
 class _GamesPageState extends State<GamesPage> {
   //kaydırma işlemiyle alakalı appbarda kullanılan değişkenler.
@@ -344,17 +318,34 @@ class _GamesPageState extends State<GamesPage> {
   final bool _snap = false;
   final bool _floating = false;
   //Aratılan oyun metodumuzda kullandığımız Gamebox tipinde listemiz.
-  List<Gamebox> oyun_aratilan = List.from(oyun_listesi);
+  void fetchGame() async {
+    String oyunlarString = (await fetchData()) as String;
+    Map<String, dynamic> json = jsonDecode(oyunlarString);
+    var list = <Gamebox>[];
+    print(json['results'].runtimeType);
+    for (var i in json['results'] as List<dynamic>) {
+      print(i.runtimeType);
+      var gameBox = Gamebox.fromJson(Map.from(i));
+      list.add(gameBox);
+    }
+    oyun_listesi = list;
+    search("");
+  }
+
+  @override
+  void initState() {
+    fetchGame();
+    // TODO: implement initState
+    super.initState();
+  }
+
   //Search fonksiyonumuzu buraya tanımladık.
   void search(String value) {
     //Oyun ismi ve oyun kategorisine göre büyük küçük harfe duyarlı arama gerçekleştirilir.
     setState(() {
       oyun_aratilan = oyun_listesi
           .where((element) =>
-              element.oyun_ismi.toLowerCase().contains(value.toLowerCase()) ||
-              element.oyun_kategorisi
-                  .toLowerCase()
-                  .contains(value.toLowerCase()))
+              element.oyun_ismi.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
   }
@@ -501,7 +492,7 @@ class _GamesPageState extends State<GamesPage> {
                             ),
                           ),
                           Text(
-                            oyun.oyun_kategorisi,
+                            oyun.oyun_kategorisi.join(", "),
                             style: const TextStyle(
                                 color: Color.fromRGBO(138, 138, 143, 1)),
                           ),
@@ -578,7 +569,7 @@ class _GamesPageState extends State<GamesPage> {
                   child: TextButton(
                     onPressed: () {
                       //Butona basıldığı anda favori listemizi güncelleyip favori sayfasına yönlendiriyor.
-                      favori_list_guncelle(oyun_listesi, favori);
+                      favori_list_guncelle(oyun_aratilan, favori);
                       Navigator.push(
                         context,
                         MaterialPageRoute(

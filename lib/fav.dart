@@ -37,7 +37,7 @@ class _FavDescpState extends State<FavDescp> {
             child: MaterialButton(
               onPressed: () {
                 //Mainde yazdığımız oyun listesini alan ve favori listemizi güncelleyen fonksiyon
-                favori_list_guncelle(oyun_listesi, favori);
+                favori_list_guncelle(oyun_aratilan, favori);
                 //Butona bastığımızda ana sayfaya dönmemizi sağlıyo
                 Navigator.popUntil(context, ((route) => route.isFirst));
               },
@@ -96,115 +96,117 @@ class _FavDescpState extends State<FavDescp> {
         ],
       ),
       //Appbarın altındaki tüm sayfayı kaplayan container
-      body: Container(
-        color: Color.fromRGBO(255, 255, 255, 0.92),
-        child: Column(
-          //Column'un içindeki her şeyi sola yaslıyor.
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //Containeri stackle sarıyoruz çünkü üzerine oyunun ismini yazdırıyoruz
-            Stack(
-              children: <Widget>[
-                Image.network(
-                  favori[fav_index].oyun_asseti,
-                  height: 291,
-                  width: double.infinity,
-                  fit: BoxFit.fill,
-                ),
-                //Gradient yapısıyla yazının arkasına gölge eklediğimiz container
-                Container(
-                  height: 291.0,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      gradient: LinearGradient(
-                          begin: FractionalOffset.topCenter,
-                          end: FractionalOffset.bottomCenter,
-                          colors: [
-                            Colors.black87.withOpacity(0.0),
-                            Colors.black87.withOpacity(0.9),
-                            Colors.black87,
-                          ],
-                          stops: const [
-                            0.0,
-                            0.8,
-                            1.0
-                          ])),
-                ),
-                //Containeri sağ alt köşeye sabitledik
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                    child: Container(
-                      width: 330,
-                      child: Text(
-                        textAlign: TextAlign.end,
-                        //Favori listemizden anlık fav_index'e göre oyunumuzun ismini çekiyor.
-                        favori[fav_index].oyun_ismi,
-                        style: const TextStyle(
-                          fontSize: 36,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            //GameDescp ve visit reddit , visit website
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Container(
+          color: Color.fromRGBO(255, 255, 255, 0.92),
+          child: Column(
+            //Column'un içindeki her şeyi sola yaslıyor.
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //Containeri stackle sarıyoruz çünkü üzerine oyunun ismini yazdırıyoruz
+              Stack(
                 children: <Widget>[
-                  //GamedDescp container
+                  Image.network(
+                    favori[fav_index].oyun_asseti,
+                    height: 291,
+                    width: double.infinity,
+                    fit: BoxFit.fill,
+                  ),
+                  //Gradient yapısıyla yazının arkasına gölge eklediğimiz container
                   Container(
-                    child: const Padding(
-                      padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-                      child: Text(
-                        "Game Description",
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
+                    height: 291.0,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        gradient: LinearGradient(
+                            begin: FractionalOffset.topCenter,
+                            end: FractionalOffset.bottomCenter,
+                            colors: [
+                              Colors.black87.withOpacity(0.0),
+                              Colors.black87.withOpacity(0.9),
+                              Colors.black87,
+                            ],
+                            stops: const [
+                              0.0,
+                              0.8,
+                              1.0
+                            ])),
+                  ),
+                  //Containeri sağ alt köşeye sabitledik
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: Container(
+                        width: 330,
+                        child: Text(
+                          textAlign: TextAlign.end,
+                          //Favori listemizden anlık fav_index'e göre oyunumuzun ismini çekiyor.
+                          favori[fav_index].oyun_ismi,
+                          style: const TextStyle(
+                            fontSize: 36,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  //Favori listemizden anlık fav_index'e göre oyunumuzun oyun tanıtımını yazdırıyoruz.
-                  Container(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: Text(favori[fav_index].oyun_tanitimi),
+                ],
+              ),
+              //GameDescp ve visit reddit , visit website
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    //GamedDescp container
+                    Container(
+                      child: const Padding(
+                        padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+                        child: Text(
+                          "Game Description",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  //aradaki ince çizgi
-                  const Divider(
-                    color: Colors.grey,
-                  ),
-                  MaterialButton(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                    onPressed: () {},
-                    child: Container(
-                      width: double.infinity,
-                      child: Text("Visit reddit"),
+                    //Favori listemizden anlık fav_index'e göre oyunumuzun oyun tanıtımını yazdırıyoruz.
+                    Container(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        child: Text(favori[fav_index].oyun_tanitimi ?? ""),
+                      ),
                     ),
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                  ),
-                  MaterialButton(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                    onPressed: () {},
-                    child: Container(
-                      width: double.infinity,
-                      child: Text("Visit website"),
+                    //aradaki ince çizgi
+                    const Divider(
+                      color: Colors.grey,
                     ),
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                  ),
-                ]),
-          ],
+                    MaterialButton(
+                      padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                      onPressed: () {},
+                      child: Container(
+                        width: double.infinity,
+                        child: Text("Visit reddit"),
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    MaterialButton(
+                      padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                      onPressed: () {},
+                      child: Container(
+                        width: double.infinity,
+                        child: Text("Visit website"),
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                  ]),
+            ],
+          ),
         ),
       ),
     );
@@ -216,7 +218,6 @@ class _FavPageState extends State<FavPage> {
   final bool _pinned = true;
   final bool _snap = false;
   final bool _floating = false;
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(229, 229, 229, 1),
@@ -321,7 +322,7 @@ class _FavPageState extends State<FavPage> {
                             ),
                           ),
                           Text(
-                            oyun.oyun_kategorisi,
+                            oyun.oyun_kategorisi.join(", "),
                             style: const TextStyle(
                                 color: Color.fromRGBO(138, 138, 143, 1)),
                           ),
